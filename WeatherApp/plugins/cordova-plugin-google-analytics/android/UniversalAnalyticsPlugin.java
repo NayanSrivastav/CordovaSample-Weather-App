@@ -10,7 +10,7 @@ import org.apache.cordova.CallbackContext;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-
+import android.util.Log;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -45,8 +45,10 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
 
     public Tracker tracker;
 
+    private String tag=":screen-name:-->";
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+        Log.d(tag, action);
         if (START_TRACKER.equals(action)) {
             String id = args.getString(0);
             int dispatchPeriod = args.length() > 1 ? args.getInt(1) : 30;
@@ -206,11 +208,15 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     }
 
     private void trackView(String screenname, String campaignUrl, boolean newSession, CallbackContext callbackContext) {
+        Log.d(tag, (trackerStarted==true)+"");
+        Log.d(tag, screenname);
+        
         if (!trackerStarted) {
             callbackContext.error("Tracker not started");
             return;
         }
-
+        tracker.setScreenName("temp");
+        tracker.send(new HitBuilders.ScreenViewBuilder());
         if (null != screenname && screenname.length() > 0) {
             tracker.setScreenName(screenname);
 
@@ -226,7 +232,8 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             } else {
                 tracker.send(hitBuilder.setNewSession().build());
             }
-
+            callbackContext.error("dummy_error: "+screenname);
+            Log.d(tag, screenname+"-->send");
             callbackContext.success("Track Screen: " + screenname);
         } else {
             callbackContext.error("Expected one non-empty string argument.");

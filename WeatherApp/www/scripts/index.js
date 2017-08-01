@@ -16,9 +16,9 @@
 
         $('#get-weather-btn').click(getWeatherWithZipCode);
         getWeatherWithGeoLocation();
-
-
-
+        window.ga.startTrackerWithId('UA-84577141-10', 3)
+        window.ga.setAllowIDFACollection(true)
+        window.ga.trackView("index");
     };
 
     function onPause() {

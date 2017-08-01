@@ -17,7 +17,8 @@ function getWeatherWithZipCode() {
         $('#error-msg').show();
         $('#error-msg').text("Error retrieving data. " + jqXHR.statusText);
     });
-
+    window.ga.trackView("result", "https://abc.com/1111?utm_source=fb&utm_campaign=my-campaign");
+    window.ga.trackEvent('interaction','click', 'find', 3);
     return false;
 }
 
